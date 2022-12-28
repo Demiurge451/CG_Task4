@@ -16,7 +16,20 @@ public class Matrix4Factories {
         return r;
     }
 
-    public enum Axis{X,Y,Z};
+    public enum Axis {
+        X("X"),
+        Y("Y"),
+        Z("Z");
+        private final String string;
+
+        Axis(String string) {
+            this.string = string;
+        }
+
+        public String getString() {
+            return string;
+        }
+    }
     public static Matrix4 rotation(float a, Axis q){
         return rotation(a, q == Axis.X ? 0 : q == Axis.Y ? 1 : 2);
     }

@@ -1,7 +1,12 @@
 import function.FuncEnum;
 import function.FunctionFactory;
+import math.Matrix4Factories;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class MainWindow extends JDialog{
     private DrawPanel drawPanel;
@@ -16,6 +21,7 @@ public class MainWindow extends JDialog{
     private JButton rotateButton;
     private JSpinner spinnerSpeed;
     private JSpinner spinnerStep;
+    private JComboBox<String> comboBoxAxes;
 
     public MainWindow() {
         setContentPane(contentPane);
@@ -24,6 +30,7 @@ public class MainWindow extends JDialog{
         initializeComboBox();
         initializeSpinners();
         drawPanel.setFocusable(true);
+        drawPanel.setRotateAxes(chooseAxes("X"));
 
         FunctionFactory functionFactory = new FunctionFactory();
 
@@ -32,6 +39,10 @@ public class MainWindow extends JDialog{
             drawPanel.setRotate(false);
             drawPanel.getFunction().setFunction(functionFactory.create(e.getItem().toString()));
             drawPanel.repaint();
+        });
+
+        comboBoxAxes.addItemListener(e -> {
+            drawPanel.setRotateAxes(chooseAxes(e.getItem().toString()));
         });
 
         spinnerMinX.addChangeListener(e -> {
@@ -91,6 +102,32 @@ public class MainWindow extends JDialog{
         for (FuncEnum func : FuncEnum.values()) {
             comboBoxFunction.addItem(func.getStr());
         }
+
+        for (Matrix4Factories.Axis axis : Matrix4Factories.Axis.values()) {
+            comboBoxAxes.addItem(axis.getString());
+        }
+        comboBoxAxes.addItem("XY");
+        comboBoxAxes.addItem("YZ");
+        comboBoxAxes.addItem("ZX");
+    }
+
+    private List<Matrix4Factories.Axis> chooseAxes(String string) {
+        Set<String> axes = new HashSet<>();
+        List<Matrix4Factories.Axis> result = new ArrayList<>();
+        for (Character character : string.toCharArray()) {
+            axes.add(character.toString());
+        }
+        one:
+        for (String str: axes) {
+            for (Matrix4Factories.Axis axis : Matrix4Factories.Axis.values()) {
+                if (axis.getString().equals(str)) {
+                    result.add(axis);
+                    continue one;
+                }
+            }
+            throw new IllegalArgumentException();
+        }
+        return result;
     }
     public static void main(String[] args) {
         MainWindow dialog = new MainWindow();

@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class DrawPanel extends JPanel {
     public DrawPanel(LayoutManager layout, boolean isDoubleBuffered) {
@@ -42,11 +43,21 @@ public class DrawPanel extends JPanel {
     private boolean isRotate = false;
     private Function function;
     private float speed;
+    private java.util.List<Matrix4Factories.Axis> rotateAxes = new ArrayList<>();
+
 
 
     public void setRotate(boolean rotate) {
         this.isRotate = rotate;
         timer.stop();
+    }
+
+    public void setRotateAxes(java.util.List<Matrix4Factories.Axis> rotateAxes) {
+        this.rotateAxes = rotateAxes;
+    }
+
+    public void addAxe(Matrix4Factories.Axis axis) {
+        rotateAxes.add(axis);
     }
 
     public void rotate() {
@@ -87,12 +98,16 @@ public class DrawPanel extends JPanel {
         function = new Function(factory.create(FuncEnum.FUNC1.getStr()), -2, 2, -2, 2, -2, 2, 0.1f);
         scene.getModels().add(function);
         ActionListener taskPerformer = e -> {
-            double radianSpeedY = speed * Math.PI / 180;
-            double radianSpeedX = speed * Math.PI / 180;
-            Matrix4 ry = Matrix4Factories.rotation((float) radianSpeedY, Matrix4Factories.Axis.Y);
-            Matrix4 rx = Matrix4Factories.rotation((float) radianSpeedX, Matrix4Factories.Axis.X);
-
-            camera.modifyRotation(ry.mul(rx));
+            double radianSpeed = speed * Math.PI / 180;
+            Matrix4 rAxis;
+            if (rotateAxes.size() == 1) {
+                rAxis = Matrix4Factories.rotation((float) radianSpeed, rotateAxes.get(0));
+                camera.modifyRotation(rAxis);
+            } else if (rotateAxes.size() == 2) {
+                Matrix4 rAxis1 = Matrix4Factories.rotation((float) radianSpeed, rotateAxes.get(0));
+                Matrix4 rAxis2 = Matrix4Factories.rotation((float) radianSpeed, rotateAxes.get(1));
+                camera.modifyRotation(rAxis2.mul(rAxis1));
+            }
             repaint();
         };
         timer = new Timer(delay, taskPerformer);

@@ -1,7 +1,7 @@
 package math;
 
 public class Vector3 {
-    private float[] values;
+    private final float[] values;
 
     public Vector3(float x, float y, float z){
         values = new float[]{x,y,z};

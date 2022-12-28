@@ -18,24 +18,24 @@ public class Camera implements ICamera{
 
     @Override
     public Vector3 w2c(Vector3 v) {
-        return  p.mul(
-                    t.mul(
-                        r.mul(
-                            s.mul(new Vector4(v,1)
+        return  p.multiply(
+                    t.multiply(
+                        r.multiply(
+                            s.multiply(new Vector4(v,1)
                             )
                         )
                     )
             ).toVector3();
     }
     public void modifyRotation(Matrix4 m){
-        r = m.mul(r);
+        r = m.multiply(r);
     }
 
     public void modifyTranslate(Matrix4 m){
-        t = m.mul(t);
+        t = m.multiply(t);
     }
 
     public void modifyScale(Matrix4 m) {
-        s = m.mul(s);
+        s = m.multiply(s);
     }
 }

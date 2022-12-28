@@ -47,7 +47,7 @@ public class Scene {
 
         List<ScreenPoint> sp = new ArrayList<>();
         for (Vector3 v : p.getPoints())
-            sp.add(sc.r2s(v));
+            sp.add(sc.realToScreen(v));
         if(p.isClosed()){
             Polygon polygon = new Polygon();
             for (ScreenPoint screenPoint : sp) {

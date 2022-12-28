@@ -106,7 +106,7 @@ public class DrawPanel extends JPanel {
             } else if (rotateAxes.size() == 2) {
                 Matrix4 rAxis1 = Matrix4Factories.rotation((float) radianSpeed, rotateAxes.get(0));
                 Matrix4 rAxis2 = Matrix4Factories.rotation((float) radianSpeed, rotateAxes.get(1));
-                camera.modifyRotation(rAxis2.mul(rAxis1));
+                camera.modifyRotation(rAxis2.multiply(rAxis1));
             }
             repaint();
         };

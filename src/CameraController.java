@@ -26,14 +26,14 @@ public class CameraController implements MouseListener, MouseMotionListener, Mou
     }
 
     private final Camera camera;
-    private final ScreenConverter sc;
+    private final ScreenConverter screenConverter;
 
     private boolean leftFlag, rightFlag;
     private ScreenPoint prev;
 
-    public CameraController(Camera camera, ScreenConverter sc) {
+    public CameraController(Camera camera, ScreenConverter screenConverter) {
         this.camera = camera;
-        this.sc = sc;
+        this.screenConverter = screenConverter;
     }
 
     @Override
@@ -86,13 +86,13 @@ public class CameraController implements MouseListener, MouseMotionListener, Mou
                 Matrix4 ry = Matrix4Factories.rotation((float) radianSpeedY, Matrix4Factories.Axis.Y);
                 Matrix4 rx = Matrix4Factories.rotation((float) radianSpeedX, Matrix4Factories.Axis.X);
 
-                camera.modifyRotation(ry.mul(rx));
+                camera.modifyRotation(ry.multiply(rx));
             }
             if (rightFlag) {
-                Vector4 z = new Vector4(sc.s2r(new ScreenPoint(0, 0)), 0);
-                Vector4 c = new Vector4(sc.s2r(new ScreenPoint(dx, dy)), 0);
+                Vector4 z = new Vector4(screenConverter.screenToReal(new ScreenPoint(0, 0)), 0);
+                Vector4 c = new Vector4(screenConverter.screenToReal(new ScreenPoint(dx, dy)), 0);
 
-                Vector3 delta = c.add(z.mul(-1)).toVector3();
+                Vector3 delta = c.add(z.multiply(-1)).toVector3();
                 camera.modifyTranslate(Matrix4Factories.translate(delta));
             }
         }

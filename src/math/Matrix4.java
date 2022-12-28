@@ -1,15 +1,13 @@
 package math;
 
 public class Matrix4 {
-    private float[] matrix;
+    private final float[] matrix;
 
 
-    public Matrix4(float[][] m){
-        matrix = new float[16];
+    public Matrix4(float[][] matrix){
+        this.matrix = new float[16];
         for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                matrix[i * 4 + j] = m[i][j];
-            }
+            System.arraycopy(matrix[i], 0, this.matrix, i * 4, 4);
         }
     }
 
@@ -17,12 +15,12 @@ public class Matrix4 {
         matrix = arr;
     }
 
-    public float getAt(int r, int c){
-        return matrix[r * 4 + c];
+    public float getAt(int row, int col){
+        return matrix[row * 4 + col];
     }
 
-    public void setAt(int r, int c, float v){
-        matrix[r * 4 + c] = v;
+    public void setAt(int row, int col, float value){
+        matrix[row * 4 + col] = value;
     }
 
     public static Matrix4 zero(){
@@ -30,40 +28,40 @@ public class Matrix4 {
     }
 
     public static Matrix4 one(){
-        Matrix4 m = zero();
+        Matrix4 matrix = zero();
         for (int i = 0; i < 4; i++) {
-            m.setAt(i,i,1);
+            matrix.setAt(i,i,1);
         }
-        return m;
+        return matrix;
     }
 
-    public Matrix4 mul(float v){
+    public Matrix4 multiply(float value){
         float[] arr = new float[matrix.length];
         for (int i = 0; i < arr.length; i++) {
-            arr[i] = matrix[i] * v;
+            arr[i] = matrix[i] * value;
         }
         return new Matrix4(arr);
     }
 
-    public Vector4 mul(Vector4 v){
+    public Vector4 multiply(Vector4 vector){
         float[] arr = new float[4];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                arr[i] += getAt(i, j) * v.at(j);
+                arr[i] += getAt(i, j) * vector.at(j);
             }
         }
         return new Vector4(arr[0], arr[1], arr[2], arr[3]);
     }
 
-    public Matrix4 mul(Matrix4 m){
-        Matrix4 r = zero();
+    public Matrix4 multiply(Matrix4 matrix){
+        Matrix4 result = zero();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 for (int k = 0; k < 4; k++) {
-                    r.setAt(i,j, r.getAt(i,j) + this.getAt(i,k) * m.getAt(k,j));
+                    result.setAt(i,j, result.getAt(i,j) + this.getAt(i,k) * matrix.getAt(k,j));
                 }
             }
         }
-        return r;
+        return result;
     }
 }

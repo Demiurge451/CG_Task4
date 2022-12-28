@@ -15,21 +15,21 @@ public class ScreenConverter {
         this.hr = hr;
     }
 
-    public ScreenPoint r2s(Vector3 v){
+    public ScreenPoint realToScreen(Vector3 v){
         double x = (v.getX() - xr) * width / wr;
         double y = (yr - v.getY()) * height / hr;
         return new ScreenPoint((int) x, (int) y);
     }
 
-    public Vector3 s2r(ScreenPoint sp, float z){
+    public Vector3 screenToReal(ScreenPoint sp, float z){
         double x = xr + sp.getX()  * wr / width;
         double y = yr - sp.getY() * hr / height;
         return new Vector3((float) x, (float) y, z);
     }
 
 
-    public Vector3 s2r(ScreenPoint sp){
-        return s2r(sp, 0f);
+    public Vector3 screenToReal(ScreenPoint sp){
+        return screenToReal(sp, 0f);
     }
 
     public void setSize(int w, int h){
